@@ -42,18 +42,18 @@ var record = time => new Promise(async resolve => {
 """
 
 def record(sec=5):
-  # Executa o código JavaScript para gravar o áudio
-  display(Javascript(RECORD))
-  # Recebe o áudio gravado como resultado do JavaScript
-  js_result = output.eval_js('record(%s)' % (sec * 1000))
-   # Decodifica o áudio em base64
-  audio = b64decode(js_result.split(',')[1])
-  # Salva o áudio em um arquivo
-  file_name = 'request_audio.wav'
-  with open(file_name, 'wb') as f:
-    f.write(audio)
-  # Retorna o caminho do arquivo de áudio (pasta padrão do Google Colab)
-  return f'/content/{file_name}'
+    # Executa o código JavaScript para gravar o áudio
+    display(Javascript(RECORD))
+    # Recebe o áudio gravado como resultado do JavaScript
+    js_result = output.eval_js('record(%s)' % (sec * 1000))
+    # Decodifica o áudio em base64
+    audio = b64decode(js_result.split(',')[1])
+    # Salva o áudio em um arquivo
+    file_name = 'request_audio.wav'
+    with open(file_name, 'wb') as f:
+        f.write(audio)
+    # Retorna o caminho do arquivo de áudio (pasta padrão do Google Colab)
+    return f'/content/{file_name}'
 
 # Grava o áudio do usuário por um tempo determinado (padrão 5 segundos)
 print('Ouvindo...\n')
@@ -117,12 +117,15 @@ print(chatgpt_response)
 
 from gtts import  gTTS
 
-# Cria um objeto gTTS com a resposta gerada pelo ChatGPT e a língua que será sintetizada em voz (variável "language").
-gtts_object = gTTS(text=chatgpt_response, lang=language, slow=False)
+# Cria o objeto gTTS com o texto gerado pelo ChatGPT
+text_to_speak = chatgpt_response
+gtts_object = gTTS(text=text_to_speak, lang=language, slow=False)
 
-# Salva o áudio da resposta no arquivo especificado (pasta padrão do Google Colab)
+# Define o caminho do arquivo de áudio
 response_audio = "/content/response_audio.wav"
+
+# Salva o áudio gerado no arquivo
 gtts_object.save(response_audio)
 
-# Reproduz o áudio da resposta salvo no arquivo
-display(Audio(response_audio, autoplay=True))
+# Exibe o áudio gravado sem reprodução automática( em alguns casos, pode ser preferível dar ao usuário a opção de reproduzir o áudio manualmente.)
+display(Audio(response_audio))
